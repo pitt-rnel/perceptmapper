@@ -87,12 +87,6 @@ class UserResponse(BoxLayout):
                     outfile.write(yaml.dump(sensationdict, default_flow_style=False))
                 self.ids['floatStencilArea'].lineDict.clear()
 
-            if movedirdict:
-                with open(fname+'_dirPixel.yml', 'w') as outfile:
-                    outfile.write(yaml.dump(imgpropertiesdict, default_flow_style=False))
-                    outfile.write(yaml.dump(movedirdict, default_flow_style=False))
-                    self.ids['floatStencilArea'].moveDict.clear()
-
             if radiosliderdict['Sensation0']:
                 with open(fname+'_RadioCheckSlider.yml', 'w') as outfile:
                     outfile.write(yaml.dump(radiosliderdict, default_flow_style=False))
@@ -109,21 +103,20 @@ class UserResponse(BoxLayout):
 
         self.ids['qualityAccordion'].collapse = False
         self.ids['modalityAccordion'].collapse = True
-        self.ids['mechBox'].set_labels_and_radio(False)
-        self.ids['tingleBox'].set_labels_and_radio(False)
-        self.ids['tempBox'].set_labels_and_radio(False)
-        self.ids['moveBox'].set_labels_and_radio(False)
-        for i in self.ids['depthBox1'].children:
+        for widg in self.ids.keys():            # this is slightly uncouth
+            if 'Box' in widg:
+                self.ids[widg].set_labels_and_radio(False)
+        for iKey in ['naturalSlider', 'painSlider', 'phantomSlider']:
+            self.ids[iKey].value = 5
+            self.ids[iKey].cursor_image = '../ImageBank/sliderVal.png'
+        for i in self.ids['depthbox1'].children:
+            i.active=False
+        for i in self.ids['depthbox2'].children:
             i.active = False
-        for i in self.ids['depthBox2'].children:
+        for i in self.ids['PLPbox1'].children:
+            i.active=False
+        for i in self.ids['PLPbox2'].children:
             i.active = False
-        self.ids['naturalSlider'].value = 0         # this is possibly redundant with the set_labels_and_radio method
-        self.ids['naturalSlider'].cursor_image = '../ImageBank/sliderVal.png'
-        self.ids['painSlider'].value = 0
-        self.ids['painSlider'].cursor_image = '../ImageBank/sliderVal.png'
-        self.ids['phantomSlider'].value = 0
-        self.ids['phantomSlider'].cursor_image = '../ImageBank/sliderVal.png'
-        self.ids['tempSlider'].value = 0
 
         pass
 
@@ -208,9 +201,12 @@ class LabelCheckResponse(CheckBox, Label):
     """class for checkbox/radio button with associated text
 
     """
+    descriptors = ListProperty()
 
     def __init__(self, **kwargs):
         super(LabelCheckResponse, self).__init__(**kwargs)
+        self.descriptors = ["Vibration", "Flutter", "Buzz", "Urge to move", "Touch", "Pressure", "Sharp", "Prick", "Tap",
+                            "Electric current", "Shock", "Pulsing", "Tickle", "Itch", "Tingle", "Numb", "Warm", "Cool"]
 
     def on_touch_up(self, touch):
         """enables checkbox/radiobutton
@@ -239,34 +235,19 @@ class LabelCheckResponse(CheckBox, Label):
                     rootwidget.ids['responseAcc'].tempDict[self.group] = self.text
                     print(self.group + ' - ' + self.text + ' sensation')
 
-                    if self.group == 'movement' and self.text != "Vibration":
-                            popup = MovementPopup()
-                            popup.open()
-
                     # PLACEHOLDER: send message for selected radiobutton
 
         else:  # is inactive
             if not self.group:          # checkbox
                 self.active = False
-                if self.text == 'Temperature':
-                    rootwidget.ids['tempBox'].parent.children[0].children[1].value = 0
-                    rootwidget.ids['tempBox'].parent.children[0].children[1].cursor_image = '../ImageBank/sliderVal.png'
-                    rootwidget.ids['tempBox'].parent.children[0].canvas.opacity = 0.5
-                    rootwidget.ids['tempBox'].parent.children[0].disabled = True
-                else:
+                for responseObj in self.parent.children[:-1]:
+                    responseObj.canvas.opacity = 0   #canvas of boxlayout
+                    responseObj.disabled = True
+                    responseObj.value = 0    # slider
+                    responseObj.cursor_image = '../ImageBank/sliderVal.png'
 
-                    for responseObj in self.parent.children[:-1]:
-                        responseObj.canvas.opacity = 0.5   # canvas of boxlayout
-                        responseObj.disabled = True
-
-                    for radioObj in self.parent.children[1].children:
-                            radioObj.active = False
-
-                    self.parent.children[0].children[1].value = 0   # slider
-                    self.parent.children[0].children[1].cursor_image = '../ImageBank/sliderVal.png'
-
-                    if self.group in rootwidget.ids['responseAcc'].tempDict.keys():
-                        rootwidget.ids['responseAcc'].tempDict[self.group] = ''
+                if self.group in rootwidget.ids['responseAcc'].tempDict.keys():
+                    rootwidget.ids['responseAcc'].tempDict[self.group]=''
 
 
 class SliderResponse(Slider):
@@ -275,10 +256,13 @@ class SliderResponse(Slider):
     """
     id = ObjectProperty(None)
     id2 = StringProperty('')
+    modalityList = ListProperty()
 
     def __init__(self, **kwargs):
         super(SliderResponse, self).__init__(**kwargs)
         self.cursor_image = '../ImageBank/sliderVal.png'
+        self.modalityList = ["Vibration", "Flutter", "Buzz", "Urge to move", "Touch", "Pressure", "Sharp", "Prick", "Tap",
+                            "Electric current", "Shock", "Pulsing", "Tickle", "Itch", "Tingle", "Numb", "Warm", "Cool"]
 
     def on_touch_up(self, touch):
         rootwidget = self.get_root_window().children[0]
@@ -289,100 +273,6 @@ class SliderResponse(Slider):
             print(self.value)
 
             # PLACEHOLDER: send message for slider value
-
-
-class MovementPopup(Popup):
-    """popup to draw movement direction
-
-    this popup is enabled iff the movement checkbox is selected and any radiobutton other than vibration is selected
-    """
-
-    def __init__(self, **kwargs):
-        super(MovementPopup, self).__init__(**kwargs)
-        content = BoxLayout(orientation='vertical')
-        content.add_widget(MovementCanvas(text="Draw Here", font_size=20, size_hint_y=0.9))
-        mybutton = MovementButton(text="Finished Entering Direction", size_hint=(1, 0.1), font_size=20)
-        content.add_widget(mybutton)
-
-        self.canvas.opacity = 0.3
-        self.background_color = 1, 1, 1, 1
-        self.content = content
-        self.title = 'Draw Movement Direction'
-        self.auto_dismiss = False
-        self.size_hint = (.55, 1)
-        self.pos_hint = {'right': 0.95, 'y': 0}
-        self.font_size = 20
-
-        mybutton.bind(on_press=self.close_popup)
-
-    def close_popup(self, instance):
-        self.dismiss()
-
-
-class MovementCanvas(Label):
-    """canvas to draw movement direction within MovemenPopup widget
-
-    """
-
-    def __init__(self, **kwargs):
-        super(MovementCanvas, self).__init__(**kwargs)
-
-    def on_touch_down(self, touch):
-        if self.collide_point(touch.x, touch.y):        # collides with label area
-            with self.canvas:
-                Color(0, 0, 0)
-                touch.ud['line'] = Line(width=5, points=(touch.x, touch.y))
-            return True
-
-    def on_touch_move(self, touch):
-        if self.collide_point(touch.x, touch.y) and 'line' in touch.ud.keys():
-            touch.ud['line'].points += [touch.x, touch.y]
-            return True
-
-        else:
-            return True
-
-    def on_touch_up(self, touch):
-        rootwidget = self.get_parent_window().children[-1]
-        stencilobj = rootwidget.ids['floatStencilArea']
-        imageobj = rootwidget.ids[stencilobj.currImage]
-        sensekey = 'sensation'+str(rootwidget.sensationNumber)+'_'+stencilobj.currImagename
-
-        if self.collide_point(touch.x, touch.y):
-            if 'line' in touch.ud.keys():
-                stencilobj.moveDict[sensekey] = touch.ud['line'].points
-                with imageobj.canvas:
-                    imageobj.segment_color.append(Color(*imageobj.colors[int(rootwidget.sensationNumber % 13)]))
-                    Line(points=touch.ud['line'].points, width=5)
-
-                # PLACEHOLDER: send message with pixel coordinates
-
-                return True
-
-            else:
-                return True
-        else:
-            return True
-
-
-class MovementButton(Button):
-    """Button within movement popup
-
-    press button to indicate user is finished entering movement direction
-    """
-
-    def __init__(self, **kwargs):
-        super(MovementButton, self).__init__(**kwargs)
-
-    def on_press(self):
-        stencilobj = self.get_root_window().children[1].ids['floatStencilArea']
-
-        # if a line has not been drawn on the canvas before a movement is added then the currImage is not updated
-        if not(stencilobj.currImage == self.get_root_window().children[1].ids['imageTab'].current_tab.content.id2):
-            stencilobj.currImage = self.get_root_window().children[1].ids['imageTab'].current_tab.content.id2
-
-        imageobj = self.get_root_window().children[1].ids[stencilobj.currImage]
-        imageobj.save_png(1)
 
 
 class SensationButton(Button):

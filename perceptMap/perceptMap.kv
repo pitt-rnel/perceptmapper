@@ -11,7 +11,7 @@
     check_pos: "left"
     font_size: 20
     yshift: 25
-
+    xshift: 0
     canvas:
         Clear
 
@@ -21,44 +21,13 @@
         Rectangle:
             texture: self.texture
             size: self.texture_size
-            pos: int(self.center_x - self.texture_size[0] / 2.), int(self.center_y - self.texture_size[1] / 2.)
+            pos: int(self.center_x - self.texture_size[0]/5), int(self.center_y - self.texture_size[1] / 2.)
 
         Rectangle:
             source: 'atlas://data/images/defaulttheme/checkbox%s%s_%s' % (('_radio' if self.group else ''), ('_disabled' if self.disabled else ''), ('on' if self.active else 'off'))
             size: sp(50), sp(50)
-            pos: int(self.x  if self.check_pos == 'left' else self.x + self.width -sp(32)), int(self.center_y - sp(self.yshift))
+            pos: int(self.x - sp(self.xshift)  if self.check_pos == 'left' else self.x + self.width -sp(32)), int(self.center_y - sp(self.yshift))
 
-<LabelCheckBox2@LabelCheckResponse>:
-    check_pos: "bottom"
-    font_size: 20
-    yshift: 25
-
-    canvas:
-        Clear
-
-        Color:
-            rgb: 1, 1, 1
-
-        Rectangle:
-            texture: self.texture
-            size: self.texture_size
-            pos: int(self.center_x - self.texture_size[0]/2 ), int(self.center_y + self.texture_size[1]*0.6)
-
-        Rectangle:
-            source: 'atlas://data/images/defaulttheme/checkbox%s%s_%s' % (('_radio' if self.group else ''), ('_disabled' if self.disabled else ''), ('on' if self.active else 'off'))
-            size: sp(50), sp(50)
-            pos: int(self.center_x-25), int(self.y)
-
-<Separator@Widget>:
-    id: separator
-    size_hint_y: None
-    height: 1
-    canvas:
-        Color:
-            rgb: 1., 0., 0.
-        Rectangle:
-            pos: 0, separator.center_y
-            size: separator.width, 2
 
 <UserResponse>:
     id: rootWidget
@@ -82,10 +51,9 @@
             text_size: self.size
 
             BoxLayout
-                padding: 25, 0
-                spacing: 20
+                padding: 25, 10
                 orientation: 'vertical'
-                spacing: 20
+                spacing: 30
                 BoxLayout
                     orientation: 'vertical'
                     Label:
@@ -101,7 +69,7 @@
                         min: 0
                         max: 10
                         step: 0.1
-                        value: 0
+                        value: 5
                         orientation: 'horizontal'
 
                     BoxLayout:
@@ -123,7 +91,7 @@
                 BoxLayout:
                     orientation: 'vertical'
                     Label:
-                        text: 'Depth of sensation'
+                        text: 'How deep did the sensation feel?'
                         size_hint_y: 0.50
                         text_size: self.size
                         halign: "left"
@@ -133,7 +101,7 @@
                     BoxLayout
                         orientation:'vertical'
                         BoxLayout:
-                            id: depthBox1
+                            id: depthbox1
                             orientation: 'horizontal'
                             LabelCheckBox:
                                 text: "Skin surface"
@@ -144,7 +112,7 @@
                                 check_pos: "left"
                                 group: 'depth'
                         BoxLayout:
-                            id: depthBox2
+                            id: depthbox2
                             orientation: 'horizontal'
                             LabelCheckBox:
                                 text: "Diffuse"
@@ -158,7 +126,7 @@
                 BoxLayout:
                     orientation: 'vertical'
                     Label:
-                        text: 'Pain Assessment Scale'
+                        text: 'How painful was the stimulation?'
                         size_hint_y: 0.15
                         text_size: self.size
                         halign: "left"
@@ -170,6 +138,7 @@
                         min: 0
                         max: 10
                         step: 0.1
+                        value: 5
                         orientation: 'horizontal'
                     BoxLayout:
                         size_hint: 0.95,  0.3
@@ -191,7 +160,7 @@
                 BoxLayout
                     orientation: 'vertical'
                     Label:
-                        text: 'Phantom Limb Pain Assessment'
+                        text: 'How intense is your phantom limb pain?'
                         size_hint_y: 0.15
                         text_size: self.size
                         halign: "left"
@@ -203,6 +172,7 @@
                         min: 0
                         max: 10
                         step: 0.1
+                        value: 5
                         orientation: 'horizontal'
                     BoxLayout:
                         size_hint: 0.95,  0.3
@@ -221,220 +191,415 @@
                             halign:"right"
                             font_size: 17
 
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: 'Where do you feel pain in your phantom limb?'
+                        size_hint_y: 0.50
+                        text_size: self.size
+                        halign: "left"
+                        valign: 'middle'
+                        font_size: 20
+
+                    BoxLayout
+                        orientation:'vertical'
+                        BoxLayout:
+                            id: PLPbox1
+                            orientation: 'horizontal'
+                            LabelCheckBox:
+                                text: "Fingertips"
+                                check_pos: "left"
+                                group: 'PLP'
+                            LabelCheckBox:
+                                text: "Wrist"
+                                check_pos: "left"
+                                group: 'PLP'
+                        BoxLayout:
+                            id: PLPbox2
+                            orientation: 'horizontal'
+                            LabelCheckBox:
+                                text: "Whole hand"
+                                check_pos: "left"
+                                group: 'PLP'
+                            LabelCheckBox:
+                                text: "All of the above"
+                                check_pos: "left"
+                                group: 'PLP'
 
         AccordionItem:
             id: modalityAccordion
             title: "Modality"
             collapse: True
             BoxLayout
-                padding: 25, 0
+                #spacing: 5
                 orientation: 'vertical'
-                BoxLayout
-                    #size_hint_y: 0.9
-                    orientation: 'vertical'
-                    LabelCheckBox:
-                        text: 'Mechanical'
-                        id: mechBox
-                        check_pos: 'right'
-                        text_size: self.size
-                        halign: "left"
-                        valign: 'middle'
-                        font_size: 20
-                    BoxLayout
-                        id: mechResponse1
-                        disabled: True
-                        opacity:0.5
-                        orientation:'horizontal'
-                        LabelCheckBox2:
-                            text: "Touch"
-                            group: 'mechanical'
-                        LabelCheckBox2:
-                            text: "Pressure"
-                            group: 'mechanical'
-                        LabelCheckBox2:
-                            text: "Sharp"
-                            group: 'mechanical'
-                    BoxLayout
-                        id: mechResponse2
-                        disabled: True
-                        opacity:0.5
-                        #size_hint_y: 0.7
-                        orientation: 'vertical'
-                        SliderResponse:
-                            id: mechIntensitySlider
-                            id2: 'mechIntensitySlider'
-                            min: 0
-                            max: 10
-                            step: 0.1
-                            orientation: 'horizontal'
-                        BoxLayout:
-                            size_hint_y: 0.7
-                            orientation: 'horizontal'
-                            Label:
-                                text: 'Faint'
-                                text_size: self.size
-                                halign:"left"
-                                valign: 'top'
-                                font_size: 15
-                            Label:
-                                text: 'Intense'
-                                text_size: self.size
-                                valign: 'top'
-                                halign:"right"
-                                font_size: 15
-
-
-                BoxLayout
-                    #size_hint_y: 0.9
-                    orientation: 'vertical'
-                    LabelCheckBox:
-                        text: 'Movement'
-                        id: moveBox
-                        check_pos: 'right'
-                        text_size: self.size
-                        halign: "left"
-                        valign: 'middle'
-                        font_size: 20
-                    BoxLayout
-                        id: moveResponse1
-                        disabled: True
-                        opacity:0.5
-                        orientation:'horizontal'
-                        LabelCheckBox2:
-                            text: "Vibration"
-                            group: 'movement'
-                        LabelCheckBox2:
-                            text: "Body/limb/joint"
-                            group: 'movement'
-                        LabelCheckBox2:
-                            text: "Across skin"
-                            group: 'movement'
-                    BoxLayout
-                        id: moveResponse2
-                        disabled: True
-                        opacity:0.5
-                        #size_hint_y: 0.5
-                        orientation: 'vertical'
-                        SliderResponse:
-                            id: moveIntensitySlider
-                            id2: 'moveIntensitySlider'
-                            min: 0
-                            max: 10
-                            step: 0.1
-                            orientation: 'horizontal'
-                        BoxLayout:
-                            size_hint_y: 0.7
-                            orientation: 'horizontal'
-                            Label:
-                                text: 'Faint'
-                                text_size: self.size
-                                halign:"left"
-                                valign: 'top'
-                                font_size: 15
-                            Label:
-                                text: 'Intense'
-                                text_size: self.size
-                                valign: 'top'
-                                halign:"right"
-                                font_size: 15
-
+                Label:
+                    text: 'Pick the words that best describe the sensation'
+                    size_hint_y: 0.05
+                    font_size: 21
                 BoxLayout:
-                    #size_hint_y: 0.9
+                    padding: 25, 10
                     orientation: 'vertical'
-                    LabelCheckBox:
-                        text: 'Tingle'
-                        id: tingleBox
-                        check_pos: 'right'
-                        #size_hint_y: 0.2
-                        text_size: self.size
-                        halign: "left"
-                        valign: "middle"
-                        font_size: 20
-                    BoxLayout
-                        id: tingleResponse1
-                        disabled: True
-                        opacity:0.5
-                        orientation:'horizontal'
-                        LabelCheckBox2:
-                            text: "Electrical"
-                            group: 'tingle'
-                        LabelCheckBox2:
-                            text: "Tickle"
-                            group: 'tingle'
-                        LabelCheckBox2:
-                            text: "Itch"
-                            group: 'tingle'
-                        LabelCheckBox2:
-                            text: "Pins & Needles"
-                            group: 'tingle'
-                    BoxLayout
-                        id: tingleResponse2
-                        disabled: True
-                        opacity:0.5
-                        #size_hint_y: 0.7
-                        orientation: 'vertical'
-                        SliderResponse:
-                            id: tingleIntensitySlider
-                            id2: 'tingleIntensitySlider'
-                            min: 0
-                            max: 10
-                            step: 0.1
-                            orientation: 'horizontal'
-                        BoxLayout:
-                            size_hint_y: 0.7
-                            orientation: 'horizontal'
-                            Label:
-                                text: 'Faint'
-                                text_size: self.size
-                                halign:"left"
-                                valign: 'top'
-                                font_size: 15
-                            Label:
-                                text: 'Intense'
-                                text_size: self.size
-                                valign: 'top'
-                                halign:"right"
-                                font_size: 15
-
-                BoxLayout:
-                    size_hint_y: 0.7
-                    orientation:'vertical'
-                    LabelCheckBox:
-                        text: 'Temperature'
-                        id: tempBox
-                        check_pos: 'right'
-                        size_hint_y: 0.7
-                        text_size: self.size
-                        halign: "left"
-                        valign: "middle"
-                        font_size: 20
                     BoxLayout:
-                        disabled: True
-                        opacity:0.5
-                        orientation:'vertical'
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Vibration'
+                            id: vibrationBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
                         SliderResponse:
-                            id: tempSlider
-                            id2: 'tempSlider'
+                            opacity: 0
+                            id: vibrationSlider
+                            id2:'vibrationSlider'
                             min: 0
                             max: 10
                             step: 0.1
+                            value: 0
                             orientation: 'horizontal'
-                        BoxLayout:
-                            size_hint_y: 0.5
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Flutter'
+                            id: flutterBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: flutterSlider
+                            id2:'flutterSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
                             orientation: 'horizontal'
-                            Label:
-                                text: "Very Cold"
-                                text_size: self.size
-                                halign:"left"
-                                valign: 'top'
-                                font_size: 15
-                            Label:
-                                text: "Very Hot"
-                                text_size: self.size
-                                halign:"right"
-                                valign: 'top'
-                                font_size: 15
-
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Buzz'
+                            id: buzzBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: buzzSlider
+                            id2:'buzzSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Urge to move'
+                            id: urgeBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: urgeSlider
+                            id2:'urgeSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Touch'
+                            id: touchBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: touchSlider
+                            id2:'touchSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Pressure'
+                            id: pressureBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: pressureSlider
+                            id2:'pressureSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Sharp'
+                            id: sharpBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: sharpSlider
+                            id2:'sharpSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Prick'
+                            id: prickBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: prickSlider
+                            id2:'prickSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Tap'
+                            id: tapBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: tapSlider
+                            id2:'tapSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Electric current'
+                            id: currentBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: electricSlider
+                            id2:'electricSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Shock'
+                            id: shockBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: shockSlider
+                            id2:'shockSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Pulsing'
+                            id: pulsingBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: pulseSlider
+                            id2:'pulseSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Tickle'
+                            id: tickleBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: tickleSlider
+                            id2:'tickleSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Itch'
+                            id: itchBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: itchSlider
+                            id2:'itchSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Tingle'
+                            id: tingleBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: tingleSlider
+                            id2:'tingleSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Numb'
+                            id: numbBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: numbSlider
+                            id2:'numbSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Warm'
+                            id: warmBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: warmSlider
+                            id2:'warmSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        LabelCheckBox:
+                            text: 'Cool'
+                            id: coolBox
+                            check_pos: 'left'
+                            text_size: self.size
+                            halign: "left"
+                            valign: 'middle'
+                            font_size: 20
+                        SliderResponse:
+                            opacity: 0
+                            id: coolSlider
+                            id2:'coolSlider'
+                            min: 0
+                            max: 10
+                            step: 0.1
+                            value: 0
+                            orientation: 'horizontal'
+                            disabled: True
 
     FloatStencil:
         id: floatStencilArea
@@ -446,7 +611,7 @@
             do_default_tab: False
             tab_height: 75
             tab_width: 100
-            
+
             TabbedPanelItem:
                 id:tab0
                 background_down: "atlas://data/images/defaulttheme/button_pressed"
@@ -468,6 +633,7 @@
             TabbedPanelItem:
                 id:tab1
                 background_down: "atlas://data/images/defaulttheme/button_pressed"
+                text:'Right\nDorsum'
                 canvas.before:
                     PushMatrix
                     Rotate:
@@ -485,6 +651,7 @@
 
             TabbedPanelItem:
                 id:tab2
+                background_down: "atlas://data/images/defaulttheme/button_pressed"
                 canvas.before:
                     PushMatrix
                     Rotate:
@@ -553,6 +720,8 @@
                     id: img5
                     id2: 'img5'
                     opacity: 1
+
+
 
         SensationButton:
             id2: 'add'
