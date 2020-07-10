@@ -1,4 +1,5 @@
-# RNEL Percept Mapping Touch Interface
+# RNEL Percept Mapping Touch Interface 
+[![DOI](https://zenodo.org/badge/260802298.svg)](https://zenodo.org/badge/latestdoi/260802298)
 
 Python and [Kivy](https://kivy.org/#home) based touch interface for reporting location and modality of percepts evoked via spinal cord stimulation in upper or lower limb amputees
 
