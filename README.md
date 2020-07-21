@@ -7,13 +7,18 @@ Python and [Kivy](https://kivy.org/#home) based touch interface for reporting lo
 
 ## Getting Started
 
-The RNEL-PerceptMapper is a simple multitouch interface that allows researchers to document the location and perceptual quality of sensations evoked via electrical stimulation of the nervous system. This GUI was developed at the University of Pittsburgh's [Rehab Neural Engineering labs](http://www.rnel.pitt.edu) for studies focused on restoring sensation via spinal cord stimulaion in upper and lower limb amputees. 
+The RNEL-PerceptMapper is a simple multitouch interface that allows researchers to document the location and perceptual quality of sensations evoked via electrical stimulation of the nervous system. This GUI was developed at the University of Pittsburgh's [Rehab Neural Engineering labs](http://www.rnel.pitt.edu) for studies focused on restoring sensation via spinal cord stimulaion in upper and lower limb amputees.  
+  
 For each repetition of stimulation, the subject can mark the location of the sensory percept with a free-hand drawing indicating the outline of the evoked percept on an image of the appropriate body segment, i.e., hand, arm, leg, sole etc. The percept quality can be recorded using several commonly used descriptors: touch, pressure, sharp, electrical, tickle, itch, pins and needles, movement, temperature, pain due to stimulation, phantom limb pain and can be modified to add custom descriptors. Each descriptor has an associated scale ranging from 0–10 to record the corresponding perceived intensity. This set of descriptors have been used [previously](https://iopscience.iop.org/article/10.1088/1741-2552/aa966a) to characterize evoked sensory percepts
 
-### Citation
-If you use this work in your research, please cite it as follows:
+### References
+Chandrasekaran, S., Nanivadekar, A., McKernan, G. P., Helm, E. R., Boninger, M. L., Collinger, J. L., Gaunt, R. A., Fisher, L. E. Sensory restoration by epidural stimulation of the lateral spinal cord in upper-limb amputees. [eLife](https://elifesciences.org/articles/54349)
 
-Chandrasekaran, S., Nanivadekar, A., McKernan, G. P., Helm, E. R., Boninger, M. L., Collinger, J. L., Gaunt, R. A., Fisher, L. E. Sensory restoration by epidural stimulation of dorsal spinal cord in upper-limb amputees. [MedRxiv](https://www.medrxiv.org/content/10.1101/19009811v1.abstract)
+### Citation
+If you use this work in your research, please cite it as follows:   
+
+Nanivadekar, A., Chandrasekaran, C., Gaunt, R., Fisher., L. (2020, May 2). RNEL PerceptMapper (Version 2.0). Zenodo. http://doi.org/10.5281/zenodo.3939658  
+[![DOI](https://zenodo.org/badge/260802298.svg)](https://zenodo.org/badge/latestdoi/260802298)
 
 Copyright (c) 2016 RNEL (University of Pittsburgh)
 
