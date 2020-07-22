@@ -113,7 +113,7 @@ Further, the GUIs internal counter for trial will be incremented and the GUI wil
 There are 2 versions of the PerceptMapper available [here](https://github.com/pitt-rnel/perceptmapper/tags). 
 
  - [v1.0](https://github.com/pitt-rnel/perceptmapper/releases/tag/v1.0)  
-This version is a specific implementation of the PerceptMapper GUI used in experiments involving spinal cord stimulation for sensory restoration in upper limb amputees and referenced [here](https://www.medrxiv.org/content/10.1101/19009811v1.abstract).  
+This version is a specific implementation of the PerceptMapper GUI used in experiments involving spinal cord stimulation for sensory restoration in upper limb amputees and referenced [here](https://elifesciences.org/articles/54349).  
   <p align="center">
   <img src="http://g.recordit.co/FiMy6DxC1i.gif" width="128" height="243">
   <img src="http://g.recordit.co/CLQDucCbWJ.gif" width="342" height="243">
